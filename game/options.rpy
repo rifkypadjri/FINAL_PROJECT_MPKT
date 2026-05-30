@@ -65,7 +65,7 @@ define config.has_voice = True
 ## dimainkan sampai permainan di mulai, sampai di hentikan atau file lain di
 ## mainkan.
 
-define config.main_menu_music = "audio/main_theme.wav"
+define config.main_menu_music = "audio/main_theme.mp3"
 
 
 ## Transisi ####################################################################

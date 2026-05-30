@@ -152,7 +152,7 @@ label bad_end_01a:
     "Bad Ending 01A - Kamu kehilangan momen itu."
     "Keesokan harinya, kamu mendengar kabar bahwa Andi ditemukan pingsan di depan lift sore itu, kelelahan dan dehidrasi parah setelah tidak makan dan tidak tidur lebih dari 30 jam."
     "Rasa sungkan dan suasana lab yang sibuk membuatnya merasa tidak ada tempat untuk meminta bantuan."
-    "Pesan Edukatif: Tahap pertama dalam P3LP adalah Memperhatikan (Look). Perhatian selama beberapa detik bisa berarti sangat banyak."
+    "Pesan Edukatif: Tahap pertama dalam P3LP adalah Memperhatikan (Look). Perhatian selama beberapa detik bisa berarti sangat banyak. [[Ref: Buku Saku P3LP 2024, hlm. 45]]"
 
     menu:
         "Apa yang ingin kamu lakukan?"
@@ -217,7 +217,7 @@ label bad_end_01b:
     "Bad Ending 01B - Andi merasa semakin kecil."
     "Andi merasa \"bodoh\" karena harus dibantu untuk hal yang menurutnya sepele, tapi dia tidak sanggup menyelesaikannya."
     "Dia pergi membawa rasa malu itu sendirian."
-    "Pesan Edukatif: Jika kondisi fisik dan emosional seseorang sedang sangat tidak stabil, fokuslah pada prinsip Listen terlebih dahulu."
+    "Pesan Edukatif: Jika kondisi fisik dan emosional seseorang sedang sangat tidak stabil, fokuslah pada validasi perasaan dan pastikan kebutuhan dasarnya terpenuhi sebelum masuk ke penyelesaian masalah teknis apapun. [[Ref: Buku Saku P3LP 2024, hlm. 46]]"
 
     menu:
         "Apa yang ingin kamu lakukan?"
@@ -287,7 +287,7 @@ label good_end_01:
     "Good Ending 01 - Yang penting perut diisi dulu."
     "Andi berhasil memenuhi kebutuhan dasarnya. Setelah makan dan beristirahat sejenak, kepanikannya mereda."
     "Tugasnya belum selesai, tapi kondisinya sudah jauh lebih baik untuk melanjutkan."
-    "Pesan Edukatif: Langkah P3LP terbaik untuk stres harian bisa sesederhana memastikan kebutuhan fisik dasar terpenuhi dan memberi dukungan sosial yang nyata."
+    "Pesan Edukatif: Langkah P3LP terbaik untuk stres harian bisa sesederhana memastikan kebutuhan fisik dasar terpenuhi dan memberi dukungan sosial yang nyata. Tidak perlu langkah besar, cukup hadir dan konkret. [[Ref: Buku Saku P3LP 2024, hlm. 48]]"
 
     menu:
         "Apa yang ingin kamu lakukan?"
@@ -322,7 +322,7 @@ label alt_end_01:
 
     "Alternative Ending 01 - Kepalanya sedikit lebih jernih sekarang."
     "Kodenya belum selesai, tapi kepanikan yang membuat Andi blank tadi sudah jauh berkurang. Dia kembali ke lab dengan kepala yang lebih jernih."
-    "Pesan Edukatif: Link dalam P3LP tidak selalu berarti rujukan ke pihak luar. Self-help sederhana seperti jeda singkat juga bisa membantu."
+    "Pesan Edukatif: Link dalam P3LP tidak selalu berarti rujukan ke pihak luar. Self-help sederhana seperti jeda singkat sangat efektif untuk mengatasi kelelahan kognitif agar mereka bisa kembali berpikir jernih. [[Ref: Buku Saku P3LP 2024, hlm. 48]]"
 
     menu:
         "Apa yang ingin kamu lakukan?"
@@ -384,7 +384,7 @@ label bad_end_02a:
     "Bad Ending 02A - Kamu tidak ada di sana."
     "Keesokan harinya, Laras tidak masuk kuliah. Notifikasinya semua dimatikan."
     "Belakangan kamu dengar dari teman bersama bahwa dia menarik diri dari semua grup, dia bilang tidak ada yang peduli."
-    "Pesan Edukatif: Look dalam P3LP juga berarti menyadari tanda isolasi sosial dan memilih untuk hadir."
+    "Pesan Edukatif: Look dalam P3LP juga berarti menyadari tanda isolasi sosial dan memilih untuk hadir. Mengabaikan tanda-tanda ini dapat memperburuk perasaan tidak berharga dan memicu withdrawal yang lebih dalam. [[Ref: Buku Saku P3LP 2024, hlm. 45]]"
 
     menu:
         "Apa yang ingin kamu lakukan?"
@@ -420,7 +420,7 @@ label bad_end_02b:
 
     "Bad Ending 02B - Rasa sakitnya tidak kamu anggap serius."
     "Laras tidak marah padamu. Tapi candaanmu membuatnya merasa kesedihannya tidak layak diakui."
-    "Pesan Edukatif: Candaan atau keceriaan yang dipaksakan saat seseorang sedang berduka bisa menjadi bentuk minimizing."
+    "Pesan Edukatif: Candaan atau keceriaan yang dipaksakan saat seseorang sedang berduka bisa membuat mereka merasa tidak aman untuk jujur soal kondisi mereka. [[Ref: Buku Saku P3LP 2024, hlm. 45]]"
 
     menu:
         "Apa yang ingin kamu lakukan?"
@@ -455,7 +455,7 @@ label bad_end_02d:
 
     "Bad Ending 02D - Terlalu cepat masuk."
     "Laras bukan tidak mau cerita. Dia hanya belum siap, dan pertanyaanmu yang langsung menunjuk ke luka terdalamnya membuatnya merasa dipojokkan."
-    "Pesan Edukatif: Jangan memaksa helpee bercerita, apalagi langsung menyentuh detail peristiwa traumatis."
+    "Pesan Edukatif: Jangan memaksa helpee bercerita, apalagi langsung menyentuh detail peristiwa traumatis. Beri ruang, bukan interogasi. [[Ref: Buku Saku P3LP 2024, hlm. 45]]"
 
     menu:
         "Apa yang ingin kamu lakukan?"
@@ -521,7 +521,7 @@ label neutral_end_02a:
 
     "Neutral Ending 02A - Kamu yang bicara. Dia yang butuh didengar."
     "Laras akhirnya pamit dengan senyum tipis. Masalahnya tidak tersalurkan, fokus beralih ke cerita kakekmu, dan duka Laras tetap terlipat rapi di balik sopan santunnya."
-    "Pesan Edukatif: Membandingkan pengalaman duka bisa membuat pusat perhatian bergeser dari helpee ke penolong."
+    "Pesan Edukatif: Membandingkan pengalaman duka bisa membuat pusat perhatian bergeser dari helpee ke penolong. Setiap orang berduka dengan caranya sendiri. [[Ref: Buku Saku P3LP 2024, hlm. 46]]"
 
     menu:
         "Apa yang ingin kamu lakukan?"
@@ -555,7 +555,7 @@ label bad_end_02c:
 
     "Bad Ending 02C - Dia berhenti menangis, tapi bebannya bertambah."
     "Laras merasa gagal menjadi mahasiswa yang kuat. Tangisannya tersedak, tapi perasaan hampanya tidak ke mana-mana."
-    "Pesan Edukatif: Tuntutan untuk harus kuat atau jangan sedih adalah bentuk toxic positivity."
+    "Pesan Edukatif: Tuntutan untuk harus kuat atau jangan sedih adalah bentuk toxic positivity. Validasi emosi jauh lebih dibutuhkan daripada paksaan untuk segera pulih. [[Ref: Buku Saku P3LP 2024, hlm. 46]]"
 
     menu:
         "Apa yang ingin kamu lakukan?"
@@ -588,7 +588,7 @@ label neutral_end_02b:
 
     "Neutral Ending 02B - Solusi diberikan sebelum perasaannya didengar."
     "Laras pulang. Perasaan hampanya tidak tersalurkan. Besok paginya, kondisinya tidak lebih baik, dia hanya lebih pandai menyembunyikannya."
-    "Pesan Edukatif: Dengarkan sampai tuntas dulu sebelum menawarkan solusi apapun."
+    "Pesan Edukatif: Dengarkan sampai tuntas dulu sebelum menawarkan solusi apapun. [[Ref: Buku Saku P3LP 2024, hlm. 46]]"
 
     menu:
         "Apa yang ingin kamu lakukan?"
@@ -654,7 +654,7 @@ label bad_end_02e:
     "Bad Ending 02E - Kata-kata itu tidak mudah dilupakan."
     "Laras pergi dengan kecemasan baru: takut dirinya gila, takut dicap dengan label yang tidak dia minta."
     "Di masa depan, dia akan dua kali berpikir sebelum meminta bantuan."
-    "Pesan Edukatif: First aider bukan psikolog. Rujukan ke profesional harus dilakukan secara kolaboratif dan bertahap."
+    "Pesan Edukatif: First aider bukan psikolog. Rujukan ke profesional harus dilakukan secara kolaboratif dan bertahap, kecuali ada risiko menyakiti diri sendiri. [[Ref: Buku Saku P3LP 2024, hlm. 48]]"
 
     menu:
         "Apa yang ingin kamu lakukan?"
@@ -686,7 +686,7 @@ label neutral_end_02c:
     "Neutral Ending 02C - Kamu sudah mendengar, tapi meninggalkan tanpa arahan."
     "Laras pulang sendirian dengan perut kosong. Karena tidak ada tawaran konkret, dia tidak tahu harus berbuat apa selanjutnya."
     "Malam itu terasa sangat panjang."
-    "Pesan Edukatif: Tawarkan opsi konkret yang bisa langsung diterima atau ditolak."
+    "Pesan Edukatif: 'Kabari aku kalau butuh apa-apa' terdengar baik, tapi di kondisi krisis helpee biasanya tidak akan menghubungi duluan. Tawarkan opsi konkret yang bisa langsung mereka terima atau tolak. [[Ref: Buku Saku P3LP 2024, hlm. 48]]"
 
     menu:
         "Apa yang ingin kamu lakukan?"
@@ -718,7 +718,7 @@ label bad_end_02f:
 
     "Bad Ending 02F - Kamu tidak tahu beban yang dia bawa."
     "Laras merasa kamu tidak memahami situasi keluarganya. Beban pikirannya bertambah, sekarang ada tekanan baru yang kamu taruh di pundaknya."
-    "Pesan Edukatif: Selalu hargai otonomi helpee. Tanya dulu apa yang mereka butuhkan, jangan langsung tentukan solusinya."
+    "Pesan Edukatif: Selalu hargai otonomi helpee. Tanya dulu apa yang mereka butuhkan, jangan langsung tentukan solusinya. [[Ref: Buku Saku P3LP 2024, hlm. 48]]"
 
     menu:
         "Apa yang ingin kamu lakukan?"
@@ -754,7 +754,7 @@ label good_end_02:
 
     "Good Ending 02 - Dia tidak sendirian malam itu."
     "Laras tidak langsung sembuh dari kedukaan. Tapi malam itu, dia punya seseorang yang menemaninya makan, dan itu cukup untuk membuat besok terasa sedikit lebih mungkin untuk dihadapi."
-    "Pesan Edukatif: Dukungan sosial nyata, kehadiran fisik, dan pemenuhan kebutuhan dasar adalah bentuk stabilisasi emosi yang efektif sebagai langkah pertama."
+    "Pesan Edukatif: Dukungan sosial nyata, kehadiran fisik, dan pemenuhan kebutuhan dasar adalah bentuk stabilisasi emosi yang paling efektif sebagai langkah pertama. [[Ref: Buku Saku P3LP 2024, hlm. 48]]"
 
     menu:
         "Apa yang ingin kamu lakukan?"
