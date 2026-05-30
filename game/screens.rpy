@@ -362,6 +362,15 @@ screen main_menu():
     frame:
         style "main_menu_frame"
 
+    add "images/gui/title_trans.png" at ui_title_menu
+
+    vbox:
+        style "main_menu_credits_vbox"
+        text _("Dibuat oleh FG 2 MPKT F"):
+            style "main_menu_credits"
+        text _("dibuat dengan bantuan artificial intelligence"):
+            style "main_menu_disclaimer"
+
     ## Pernyataan 'use' mengikutsertakan layar lain ke layar ini. Isi sebenarnya
     ## dari menu utama adalah layar navigasi.
     use navigation
@@ -383,6 +392,27 @@ style main_menu_vbox is vbox
 style main_menu_text is gui_text
 style main_menu_title is main_menu_text
 style main_menu_version is main_menu_text
+style main_menu_credits is main_menu_text
+style main_menu_disclaimer is main_menu_text
+
+style main_menu_credits_vbox:
+    xalign 0.63
+    yalign 0.90
+    spacing 6
+    xmaximum 900
+
+style main_menu_credits:
+    size 26
+    color "#ffffff"
+    text_align 0.5
+    xalign 0.5
+
+style main_menu_disclaimer:
+    size 20
+    color "#cccccc"
+    italic True
+    text_align 0.5
+    xalign 0.5
 
 style main_menu_frame:
     xsize 420

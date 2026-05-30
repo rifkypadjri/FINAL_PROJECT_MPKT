@@ -1,77 +1,56 @@
 ﻿# Kamu dapat taruh script game mu di file ini.
 
 init python:
+    import os
+
+    def _audio_candidates(filename):
+        resolved = AUDIO_ALIASES.get(filename, filename)
+        base, ext = os.path.splitext(resolved)
+        names = [resolved]
+        if ext == ".mp3":
+            names.append(base + ".wav")
+        elif ext == ".wav":
+            names.append(base + ".mp3")
+        else:
+            names.append(base + ".mp3")
+            names.append(base + ".wav")
+        paths = []
+        for name in names:
+            paths.append("audio/" + name)
+            paths.append(name)
+        return paths
+
     def safe_music(filename, fadeout=1.0, fadein=1.0):
-        paths = ["audio/" + filename, filename]
-        for path in paths:
+        for path in _audio_candidates(filename):
             if renpy.loadable(path):
                 renpy.music.play(path, channel="music", fadeout=fadeout, fadein=fadein)
                 return
         renpy.music.stop(channel="music", fadeout=fadeout)
 
     def safe_sound(filename):
-        paths = ["audio/" + filename, filename]
-        for path in paths:
+        for path in _audio_candidates(filename):
             if renpy.loadable(path):
                 renpy.sound.play(path)
                 return
 
-# Placeholder visual. Ganti file ini dengan deklarasi image asli saat aset sudah tersedia.
-image bg blck = Solid("#111111")
-image bg lab_komputer = Solid("#253447")
-image bg kantin_fasilkom = Solid("#4d3a24")
-image bg luar_gedung_fasilkom = Solid("#2f4a3d")
-image bg lorong_fasilkom_sore = Solid("#463a52")
-image bg kamar_kosan = Solid("#2a2438")
-image bg kamar_kosan_malam = Solid("#1e1a2e")
-image bg lorong_gedung_baru = Solid("#3d4a5c")
-image bg selasar_gedung_baru = Solid("#4a5d6e")
-image bg balkon_lt5_malam = Solid("#0f1520")
-image bg overlay_merah = Solid("#5a1010")
-image bg overlay_kuning = Solid("#5a4a10")
-image bg overlay_hitam = Solid("#050505")
+    def stop_game_audio(fadeout=0.35):
+        renpy.music.stop(channel="music", fadeout=fadeout)
+        renpy.sound.stop()
 
-image andi sad = Text("Andi - sad", size=44, color="#ffffff")
-image andi defensive = Text("Andi - defensive", size=44, color="#ffffff")
-image andi cry = Text("Andi - cry", size=44, color="#ffffff")
-image andi surprised = Text("Andi - surprised", size=44, color="#ffffff")
-image andi normal = Text("Andi - normal", size=44, color="#ffffff")
-image andi panic = Text("Andi - panic", size=44, color="#ffffff")
-image andi exhausted = Text("Andi - exhausted", size=44, color="#ffffff")
+    def play_bad_end_audio():
+        stop_game_audio(0.15)
+        safe_sound("sfx_badend.mp3")
+        safe_music("bgm_badend.mp3")
 
-image laras sad = Text("Laras - sad", size=44, color="#ffffff")
-image laras shocked = Text("Laras - shocked", size=44, color="#ffffff")
-image laras tense = Text("Laras - tense", size=44, color="#ffffff")
-image laras open = Text("Laras - open", size=44, color="#ffffff")
-image laras relieved = Text("Laras - relieved", size=44, color="#ffffff")
-image laras alarmed = Text("Laras - alarmed", size=44, color="#ffffff")
-image laras guilty = Text("Laras - guilty", size=44, color="#ffffff")
-image laras flat = Text("Laras - flat", size=44, color="#ffffff")
-image laras cry = Text("Laras - cry", size=44, color="#ffffff")
+    def play_neutral_end_audio():
+        stop_game_audio(0.15)
+        safe_sound("sfx_neutralend.mp3")
+        safe_music("bgm_melancholy.mp3")
 
-image geri read_receipt = Text("Geri - read_receipt", size=44, color="#ffffff")
-image geri sad = Text("Geri - sad", size=44, color="#ffffff")
-image geri closed_off = Text("Geri - closed_off", size=44, color="#ffffff")
-image geri cry = Text("Geri - cry", size=44, color="#ffffff")
-image geri grateful = Text("Geri - grateful", size=44, color="#ffffff")
-image geri surprised = Text("Geri - surprised", size=44, color="#ffffff")
-image geri normal = Text("Geri - normal", size=44, color="#ffffff")
-image geri offended = Text("Geri - offended", size=44, color="#ffffff")
-
-image budi blank_stare = Text("Budi - blank_stare", size=44, color="#ffffff")
-image budi cornered = Text("Budi - cornered", size=44, color="#ffffff")
-image budi breakdown = Text("Budi - breakdown", size=44, color="#ffffff")
-image budi bitter = Text("Budi - bitter", size=44, color="#ffffff")
-image budi exhausted = Text("Budi - exhausted", size=44, color="#ffffff")
-image budi held = Text("Budi - held", size=44, color="#ffffff")
-
-transform kiri:
-    xalign 0.2
-    yalign 0.8
-
-transform kanan:
-    xalign 0.8
-    yalign 0.8
+    def play_good_end_audio(bgm="bgm_warm.mp3"):
+        stop_game_audio(0.15)
+        safe_sound("sfx_goodend.mp3")
+        safe_music(bgm)
 
 define k = Character("Kiran", color="#9ad7ff")
 define a = Character("Andi", color="#ffd08a")
@@ -79,12 +58,33 @@ define l = Character("Laras", color="#d6b2ff")
 define g = Character("Geri", color="#8aff9a")
 define b = Character("Budi", color="#ff9a9a")
 
+label goto_start:
+    $ stop_game_audio(0.35)
+    jump start
+
+label end_game_quit:
+    $ stop_game_audio(0.35)
+    return
+
+label splashscreen:
+
+    scene black
+    show ui logo trans at ui_logo_splash with dissolve
+    pause 2.0
+    hide ui logo trans with dissolve
+    return
+
 label start:
 
     scene bg blck with dissolve
 
-    "First Aid untuk Jiwa"
-    "P3LP Fasilkom UI"
+    show ui title trans at ui_title_start with dissolve
+    pause 1.8
+
+    "Dibuat oleh FG 2 MPKT F"
+    "dibuat dengan bantuan artificial intelligence"
+
+    hide ui title trans with dissolve
 
     menu:
         "Pilih skenario."
@@ -110,13 +110,12 @@ label scene_01_intro:
 
     scene bg lab_komputer with dissolve
     $ safe_music("bgm_hectic.mp3")
+    show andi sad at kiri
 
     "Hari ini adalah deadline pengumpulan tugas PBP."
     "Kamu datang ke lab komputer untuk menyelesaikan bagian yang belum selesai, bergabung dengan teman-teman yang juga sedang ngebut."
     "Di antara keramaian itu, kamu melihat Andi, matanya merah, tangannya gemetar, mukanya tampak kosong menatap layar."
     "Error log yang sama berulang di layarnya sudah berjam-jam."
-
-    show andi sad at kiri with dissolve
 
     jump pilihan_01_andi
 
@@ -147,10 +146,8 @@ label cabang_01a_andi:
 
 label bad_end_01a:
 
-    scene bg overlay_merah with dissolve
-    hide andi
-    $ safe_sound("sfx_badend.mp3")
-    $ safe_music("bgm_badend.mp3")
+    call ending_frame("bad", "bg lab_komputer", "andi normal", "kiri")
+    $ play_bad_end_audio()
 
     "Bad Ending 01A - Kamu kehilangan momen itu."
     "Keesokan harinya, kamu mendengar kabar bahwa Andi ditemukan pingsan di depan lift sore itu, kelelahan dan dehidrasi parah setelah tidak makan dan tidak tidur lebih dari 30 jam."
@@ -161,13 +158,14 @@ label bad_end_01a:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 01":
+            $ stop_game_audio(0.25)
             scene bg lab_komputer with dissolve
             $ safe_music("bgm_hectic.mp3")
             show andi sad at kiri
             jump pilihan_01_andi
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label cabang_01b_andi:
 
@@ -206,16 +204,15 @@ label cabang_02a_andi:
 
     show andi sad at kiri with dissolve
 
+    $ safe_sound("sfx_laptop_slam.mp3")
     "Tiba-tiba, Andi menutup laptopnya dengan keras dan berdiri meninggalkan lab tanpa sepatah kata pun."
 
     jump bad_end_01b
 
 label bad_end_01b:
 
-    scene bg overlay_merah with dissolve
-    hide andi
-    $ safe_sound("sfx_badend.mp3")
-    $ safe_music("bgm_badend.mp3")
+    call ending_frame("bad", "bg lab_komputer", "andi normal", "kiri")
+    $ play_bad_end_audio()
 
     "Bad Ending 01B - Andi merasa semakin kecil."
     "Andi merasa \"bodoh\" karena harus dibantu untuk hal yang menurutnya sepele, tapi dia tidak sanggup menyelesaikannya."
@@ -226,13 +223,14 @@ label bad_end_01b:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 02":
+            $ stop_game_audio(0.25)
             scene bg lab_komputer with dissolve
             $ safe_music("bgm_focus.mp3")
             show andi defensive at kiri
             jump pilihan_02_andi
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label cabang_02b_andi:
 
@@ -268,6 +266,7 @@ label cabang_03a_andi:
     $ safe_music("bgm_warm.mp3")
 
     show andi surprised at kiri with dissolve
+    $ safe_sound("sfx_stomach_growl.mp3")
     "Andi ragu sejenak melihat laptopnya, tapi perutnya berbunyi."
 
     show andi normal at kiri with dissolve
@@ -282,8 +281,8 @@ label cabang_03a_andi:
 
 label good_end_01:
 
-    scene bg kantin_fasilkom with dissolve
-    $ safe_music("bgm_warm.mp3")
+    call ending_frame("good", "bg kantin_fasilkom", "andi relieved", "kiri")
+    $ play_good_end_audio("bgm_warm.mp3")
 
     "Good Ending 01 - Yang penting perut diisi dulu."
     "Andi berhasil memenuhi kebutuhan dasarnya. Setelah makan dan beristirahat sejenak, kepanikannya mereda."
@@ -294,10 +293,10 @@ label good_end_01:
         "Apa yang ingin kamu lakukan?"
 
         "Mainkan skenario lain":
-            jump start
+            jump goto_start
 
         "Selesai":
-            return
+            jump end_game_quit
 
 label cabang_03b_andi:
 
@@ -318,8 +317,8 @@ label cabang_03b_andi:
 
 label alt_end_01:
 
-    scene bg luar_gedung_fasilkom with dissolve
-    $ safe_music("bgm_warm.mp3")
+    call ending_frame("good", "bg luar_gedung_fasilkom", "andi relieved", "kiri")
+    $ play_good_end_audio("bgm_warm.mp3")
 
     "Alternative Ending 01 - Kepalanya sedikit lebih jernih sekarang."
     "Kodenya belum selesai, tapi kepanikan yang membuat Andi blank tadi sudah jauh berkurang. Dia kembali ke lab dengan kepala yang lebih jernih."
@@ -329,21 +328,21 @@ label alt_end_01:
         "Apa yang ingin kamu lakukan?"
 
         "Mainkan skenario lain":
-            jump start
+            jump goto_start
 
         "Selesai":
-            return
+            jump end_game_quit
 
 label scene_02_intro:
 
     scene bg lorong_fasilkom_sore with dissolve
     $ safe_music("bgm_quiet_ambient.mp3")
+    $ safe_sound("sfx_rain_ambient.mp3")
+    show laras sad at kiri
 
     "Kelas terakhir baru saja selesai. Kamu berjalan melewati lorong yang mulai sepi, teman-teman lain sudah buru-buru pulang."
     "Di ujung koridor, kamu melihat Laras. Dia duduk mematung di bangku panjang, matanya sembab, tangannya menggenggam ponsel yang layarnya mati."
     "Kamu tahu Laras baru kehilangan salah satu anggota keluarganya minggu lalu. Tapi ini pertama kalinya kamu melihat dia tampak sepecah ini di kampus."
-
-    show laras sad at kiri with dissolve
 
     jump pilihan_01_laras
 
@@ -379,10 +378,8 @@ label cabang_01a_laras:
 
 label bad_end_02a:
 
-    scene bg overlay_merah with dissolve
-    hide laras
-    $ safe_sound("sfx_badend.mp3")
-    $ safe_music("bgm_badend.mp3")
+    call ending_frame("bad", "bg lorong_fasilkom_sore", "laras flat", "kiri")
+    $ play_bad_end_audio()
 
     "Bad Ending 02A - Kamu tidak ada di sana."
     "Keesokan harinya, Laras tidak masuk kuliah. Notifikasinya semua dimatikan."
@@ -393,13 +390,14 @@ label bad_end_02a:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 01":
+            $ stop_game_audio(0.25)
             scene bg lorong_fasilkom_sore with dissolve
             $ safe_music("bgm_quiet_ambient.mp3")
             show laras sad at kiri
             jump pilihan_01_laras
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label cabang_01b_laras:
 
@@ -409,7 +407,7 @@ label cabang_01b_laras:
     show laras shocked at kiri with dissolve
     k "Laras! Kok bengong aja? Hujan-hujan gini mending kita cari seblak yuk biar mood naik!"
 
-    show laras flat at kiri with dissolve
+    show laras cold at kiri with dissolve
     l "Maaf, aku lagi nggak pengen makan seblak."
     "Dia bangkit dan pergi tanpa menoleh lagi."
 
@@ -417,10 +415,8 @@ label cabang_01b_laras:
 
 label bad_end_02b:
 
-    scene bg overlay_merah with dissolve
-    hide laras
-    $ safe_sound("sfx_badend.mp3")
-    $ safe_music("bgm_badend.mp3")
+    call ending_frame("bad", "bg lorong_fasilkom_sore", "laras cold", "kiri")
+    $ play_bad_end_audio()
 
     "Bad Ending 02B - Rasa sakitnya tidak kamu anggap serius."
     "Laras tidak marah padamu. Tapi candaanmu membuatnya merasa kesedihannya tidak layak diakui."
@@ -430,13 +426,14 @@ label bad_end_02b:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 01":
+            $ stop_game_audio(0.25)
             scene bg lorong_fasilkom_sore with dissolve
             $ safe_music("bgm_quiet_ambient.mp3")
             show laras sad at kiri
             jump pilihan_01_laras
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label cabang_01d_laras:
 
@@ -453,10 +450,8 @@ label cabang_01d_laras:
 
 label bad_end_02d:
 
-    scene bg overlay_merah with dissolve
-    hide laras
-    $ safe_sound("sfx_badend.mp3")
-    $ safe_music("bgm_badend.mp3")
+    call ending_frame("bad", "bg lorong_fasilkom_sore", "laras flat", "kiri")
+    $ play_bad_end_audio()
 
     "Bad Ending 02D - Terlalu cepat masuk."
     "Laras bukan tidak mau cerita. Dia hanya belum siap, dan pertanyaanmu yang langsung menunjuk ke luka terdalamnya membuatnya merasa dipojokkan."
@@ -466,17 +461,19 @@ label bad_end_02d:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 01":
+            $ stop_game_audio(0.25)
             scene bg lorong_fasilkom_sore with dissolve
             $ safe_music("bgm_quiet_ambient.mp3")
             show laras sad at kiri
             jump pilihan_01_laras
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label cabang_01c_laras:
 
     $ safe_sound("sfx_correct.mp3")
+    $ safe_sound("sfx_footsteps_slow.mp3")
     $ safe_music("bgm_gentle.mp3")
 
     "Kamu memperlambat langkah dan duduk di sebelah Laras, tidak terlalu dekat, tidak terlalu jauh. Tidak langsung ngomong apa-apa."
@@ -519,6 +516,9 @@ label cabang_02a_laras:
 
 label neutral_end_02a:
 
+    call ending_frame("neutral", "bg lorong_fasilkom_sore", "laras flat", "kiri")
+    $ play_neutral_end_audio()
+
     "Neutral Ending 02A - Kamu yang bicara. Dia yang butuh didengar."
     "Laras akhirnya pamit dengan senyum tipis. Masalahnya tidak tersalurkan, fokus beralih ke cerita kakekmu, dan duka Laras tetap terlipat rapi di balik sopan santunnya."
     "Pesan Edukatif: Membandingkan pengalaman duka bisa membuat pusat perhatian bergeser dari helpee ke penolong."
@@ -527,13 +527,14 @@ label neutral_end_02a:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 02":
+            $ stop_game_audio(0.25)
             scene bg lorong_fasilkom_sore with dissolve
             $ safe_music("bgm_gentle.mp3")
             show laras open at kiri
             jump pilihan_02_laras
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label cabang_02c_laras:
 
@@ -549,10 +550,8 @@ label cabang_02c_laras:
 
 label bad_end_02c:
 
-    scene bg overlay_merah with dissolve
-    hide laras
-    $ safe_sound("sfx_badend.mp3")
-    $ safe_music("bgm_badend.mp3")
+    call ending_frame("bad", "bg lorong_fasilkom_sore", "laras flat", "kiri")
+    $ play_bad_end_audio()
 
     "Bad Ending 02C - Dia berhenti menangis, tapi bebannya bertambah."
     "Laras merasa gagal menjadi mahasiswa yang kuat. Tangisannya tersedak, tapi perasaan hampanya tidak ke mana-mana."
@@ -562,13 +561,14 @@ label bad_end_02c:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 02":
+            $ stop_game_audio(0.25)
             scene bg lorong_fasilkom_sore with dissolve
             $ safe_music("bgm_gentle.mp3")
             show laras open at kiri
             jump pilihan_02_laras
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label cabang_02d_laras:
 
@@ -583,6 +583,9 @@ label cabang_02d_laras:
 
 label neutral_end_02b:
 
+    call ending_frame("neutral", "bg lorong_fasilkom_sore", "laras flat", "kiri")
+    $ play_neutral_end_audio()
+
     "Neutral Ending 02B - Solusi diberikan sebelum perasaannya didengar."
     "Laras pulang. Perasaan hampanya tidak tersalurkan. Besok paginya, kondisinya tidak lebih baik, dia hanya lebih pandai menyembunyikannya."
     "Pesan Edukatif: Dengarkan sampai tuntas dulu sebelum menawarkan solusi apapun."
@@ -591,13 +594,14 @@ label neutral_end_02b:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 02":
+            $ stop_game_audio(0.25)
             scene bg lorong_fasilkom_sore with dissolve
             $ safe_music("bgm_gentle.mp3")
             show laras open at kiri
             jump pilihan_02_laras
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label cabang_02b_laras:
 
@@ -644,10 +648,8 @@ label cabang_03a_laras:
 
 label bad_end_02e:
 
-    scene bg overlay_merah with dissolve
-    hide laras
-    $ safe_sound("sfx_badend.mp3")
-    $ safe_music("bgm_badend.mp3")
+    call ending_frame("bad", "bg lorong_fasilkom_sore", "laras flat", "kiri")
+    $ play_bad_end_audio()
 
     "Bad Ending 02E - Kata-kata itu tidak mudah dilupakan."
     "Laras pergi dengan kecemasan baru: takut dirinya gila, takut dicap dengan label yang tidak dia minta."
@@ -658,13 +660,14 @@ label bad_end_02e:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 03":
+            $ stop_game_audio(0.25)
             scene bg lorong_fasilkom_sore with dissolve
             $ safe_music("bgm_warm.mp3")
             show laras open at kiri
             jump pilihan_03_laras
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label cabang_03c_laras:
 
@@ -677,6 +680,9 @@ label cabang_03c_laras:
 
 label neutral_end_02c:
 
+    call ending_frame("neutral", "bg lorong_fasilkom_sore", "laras tense", "kiri")
+    $ play_neutral_end_audio()
+
     "Neutral Ending 02C - Kamu sudah mendengar, tapi meninggalkan tanpa arahan."
     "Laras pulang sendirian dengan perut kosong. Karena tidak ada tawaran konkret, dia tidak tahu harus berbuat apa selanjutnya."
     "Malam itu terasa sangat panjang."
@@ -686,13 +692,14 @@ label neutral_end_02c:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 03":
+            $ stop_game_audio(0.25)
             scene bg lorong_fasilkom_sore with dissolve
             $ safe_music("bgm_warm.mp3")
             show laras open at kiri
             jump pilihan_03_laras
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label cabang_03d_laras:
 
@@ -706,10 +713,8 @@ label cabang_03d_laras:
 
 label bad_end_02f:
 
-    scene bg overlay_merah with dissolve
-    hide laras
-    $ safe_sound("sfx_badend.mp3")
-    $ safe_music("bgm_badend.mp3")
+    call ending_frame("bad", "bg lorong_fasilkom_sore", "laras flat", "kiri")
+    $ play_bad_end_audio()
 
     "Bad Ending 02F - Kamu tidak tahu beban yang dia bawa."
     "Laras merasa kamu tidak memahami situasi keluarganya. Beban pikirannya bertambah, sekarang ada tekanan baru yang kamu taruh di pundaknya."
@@ -719,13 +724,14 @@ label bad_end_02f:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 03":
+            $ stop_game_audio(0.25)
             scene bg lorong_fasilkom_sore with dissolve
             $ safe_music("bgm_warm.mp3")
             show laras open at kiri
             jump pilihan_03_laras
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label cabang_03b_laras:
 
@@ -743,8 +749,8 @@ label cabang_03b_laras:
 
 label good_end_02:
 
-    scene bg kantin_fasilkom with dissolve
-    $ safe_music("bgm_open.mp3")
+    call ending_frame("good", "bg kantin_fasilkom_s2", "laras relieved", "kiri")
+    $ play_good_end_audio("bgm_open.mp3")
 
     "Good Ending 02 - Dia tidak sendirian malam itu."
     "Laras tidak langsung sembuh dari kedukaan. Tapi malam itu, dia punya seseorang yang menemaninya makan, dan itu cukup untuk membuat besok terasa sedikit lebih mungkin untuk dihadapi."
@@ -754,10 +760,10 @@ label good_end_02:
         "Apa yang ingin kamu lakukan?"
 
         "Mainkan skenario lain":
-            jump start
+            jump goto_start
 
         "Selesai":
-            return
+            jump end_game_quit
 
 # --- SKENARIO 3: MATIL ---
 
@@ -765,6 +771,7 @@ label scene_03_intro:
 
     scene bg kamar_kosan with dissolve
     $ safe_music("bgm_tense_night.mp3")
+    show geri read_receipt at kiri_grup
 
     "Malam ini kamu sedang mereview dokumen proyek kelompok di kamar kosan."
     "Tiba-tiba grup chat proyek kelompokmu mendadak ramai."
@@ -775,8 +782,6 @@ label scene_03_intro:
     "\"Gue hapus aja ya namanya dari submission besok pagi? Gak usah dikasih ampun.\""
 
     "Kamu melihat tanda centang biru di semua pesan itu. Geri sudah membaca semuanya — tapi tidak membalas sepatah kata pun."
-
-    show geri read_receipt at kiri with dissolve
 
     jump pilihan_01_geri
 
@@ -991,10 +996,8 @@ label cabang_03c_geri:
 
 label bad_end_03a:
 
-    scene bg overlay_merah with dissolve
-    hide geri
-    $ safe_sound("sfx_badend.mp3")
-    $ safe_music("bgm_badend.mp3")
+    call ending_frame("bad", "bg kamar_kosan", "geri normal", "kiri")
+    $ play_bad_end_audio()
 
     "Bad Ending 03A - Geri merasa sirkelnya sendiri sudah membuangnya."
     "Geri mengalami kecemasan sosial akut, mengurung diri di kosan, dan memutuskan untuk drop mata kuliah tersebut karena takut bertemu dengan sirkelnya di kampus."
@@ -1004,20 +1007,19 @@ label bad_end_03a:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 01":
+            $ stop_game_audio(0.25)
             scene bg kamar_kosan with dissolve
             $ safe_music("bgm_tense_night.mp3")
-            show geri read_receipt at kiri
+            show geri read_receipt at kiri_grup
             jump pilihan_01_geri
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label neutral_end_03a:
 
-    scene bg overlay_kuning with dissolve
-    hide geri
-    $ safe_sound("sfx_neutralend.mp3")
-    $ safe_music("bgm_melancholy.mp3")
+    call ending_frame("neutral", "bg kamar_kosan", "geri closed_off", "kiri")
+    $ play_neutral_end_audio()
 
     "Neutral Ending 03A - Suasana dingin. Geri tetap menarik diri."
     "Suasana grup menjadi dingin dan canggung. Geri tetap tidak mengumpulkan tugasnya karena merasa menjadi beban konflik, dan memilih menarik diri dari sirkel pertemanan."
@@ -1027,20 +1029,19 @@ label neutral_end_03a:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 01":
+            $ stop_game_audio(0.25)
             scene bg kamar_kosan with dissolve
             $ safe_music("bgm_tense_night.mp3")
-            show geri read_receipt at kiri
+            show geri read_receipt at kiri_grup
             jump pilihan_01_geri
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label neutral_end_03b:
 
-    scene bg overlay_kuning with dissolve
-    hide geri
-    $ safe_sound("sfx_neutralend.mp3")
-    $ safe_music("bgm_melancholy.mp3")
+    call ending_frame("neutral", "bg kamar_kosan_malam", "geri sad", "kiri")
+    $ play_neutral_end_audio()
 
     "Neutral Ending 03B - Geri pasrah. Namanya dicoret dari submission."
     "Geri tidak membalas lagi pesanmu malam itu. Keesokan paginya, ketua kelompok benar-benar mencoret nama Geri dari submission."
@@ -1050,20 +1051,20 @@ label neutral_end_03b:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 02":
+            $ stop_game_audio(0.25)
             scene bg kamar_kosan with dissolve
             $ safe_music("bgm_focus.mp3")
             show geri sad at kiri
             jump pilihan_02_geri
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label good_end_03:
 
-    scene bg kamar_kosan_malam with dissolve
-    $ safe_music("bgm_warm.mp3")
+    call ending_frame("good", "bg kamar_kosan_malam", "geri grateful", "kiri")
+    $ play_good_end_audio("bgm_warm.mp3")
 
-    hide geri
     "Good Ending 03 - Kesalahpahaman berhasil diluruskan."
     "Melalui bantuanmu — baik dengan mengetik ulang data maupun mediasi privat dengan ketua kelompok — kesalahpahaman tentang 'matil' berhasil diluruskan."
     "Kelompok sepakat memberikan kelonggaran waktu. Nama Geri tidak dicoret. Hubungan sirkel pertemanan kalian tetap terjaga dengan baik."
@@ -1073,10 +1074,10 @@ label good_end_03:
         "Apa yang ingin kamu lakukan?"
 
         "Mainkan skenario lain":
-            jump start
+            jump goto_start
 
         "Selesai":
-            return
+            jump end_game_quit
 
 # --- SKENARIO 4: DEMO DAY ---
 
@@ -1084,15 +1085,14 @@ label scene_04_intro:
 
     scene bg lorong_gedung_baru with dissolve
     $ safe_music("bgm_hectic_corridor.mp3")
+    show andi panic at kiri_demo
+    show laras cry at kanan_demo
 
     "Hari ini adalah jadwal giliranmu untuk mendemonstrasikan proyek akhir mata kuliah SDA ke asisten dosen."
     "Saat kamu menunggu giliran di lorong, kamu melihat dua temanmu yang satu slot waktu demo di lab sebelah."
     "Andi duduk bersandar di dinding lorong sambil memegang dadanya, napasnya pendek-pendek, dan wajahnya pucat."
     "Di sebelahnya, Laras duduk memeluk lutut sambil menangis sesenggukan karena berkas laporan kelompoknya mendadak corrupt."
     "Antrean asdos berjalan cepat, dan 10 menit lagi giliranmu masuk ke lab akan tiba."
-
-    show andi panic at kiri
-    show laras cry at kanan
 
     jump pilihan_01_demo
 
@@ -1158,8 +1158,8 @@ label cabang_01c_demo:
     "Kamu berhasil mengendalikan situasi dengan tenang. Kamu meminta Andi meluruskan kakinya dan menuntun Laras untuk ikut menarik napas dalam-dalam bersamamu."
     "Napas Andi mulai melambat dan membaik, namun dia bergumam:"
 
-    show andi exhausted at kiri
-    show laras sad at kanan
+    show andi exhausted at kiri_demo
+    show laras sad_s4 at kanan_demo
 
     a "Gue beneran blank, Ran... Program AVL Tree gue mendadak error pas gue tes run tadi di selasar. Gue takut gak lulus matkul ini."
     "Di sisi lain, Laras masih menangis karena selain laporan kelompoknya rusak, dia merasa bersalah karena Geri sempat dituduh 'matil' oleh anak-anak sirkel mereka semalam."
@@ -1197,8 +1197,8 @@ label cabang_02c_demo:
     $ safe_sound("sfx_tricky.mp3")
     $ safe_music("bgm_melancholy.mp3")
 
-    show andi exhausted at kiri
-    show laras sad at kanan
+    show andi exhausted at kiri_demo
+    show laras sad_s4 at kanan_demo
 
     k "Guys, plis, gue juga 10 menit lagi maju demo dan asdos penguji gue terkenal pelit nilai. Kita semua lagi pusing, yuk bisa yuk tahan bentar!"
     "Andi semakin blank karena logikanya diintervensi, sedangkan Laras merasa ketakutan sosialnya diremehkan."
@@ -1230,8 +1230,8 @@ label cabang_02b_demo:
     "Pintu lab terbuka, dan asdos memanggil nama kelompok mereka untuk masuk."
     "Mereka berdua sudah jauh lebih stabil, tetapi masih butuh penguat eksternal agar kecemasan tidak kambuh saat dicecar asdos."
 
-    show andi normal at kiri
-    show laras normal at kanan
+    show andi normal s4 at kiri_demo
+    show laras normal at kanan_demo
 
     jump pilihan_03_demo
 
@@ -1282,11 +1282,8 @@ label cabang_03c_demo:
 
 label bad_end_04:
 
-    scene bg overlay_merah with dissolve
-    hide andi
-    hide laras
-    $ safe_sound("sfx_badend.mp3")
-    $ safe_music("bgm_badend.mp3")
+    call ending_frame_dual("bad", "bg lorong_gedung_baru", "andi normal s4", "kiri_demo", "laras normal", "kanan_demo")
+    $ play_bad_end_audio()
 
     "Bad Ending 04 - Lorong lab menjadi gaduh."
     "Lorong lab menjadi gaduh dan mengganggu jalannya demo mahasiswa lain. Asdos menegurmu karena membuat keributan."
@@ -1297,22 +1294,20 @@ label bad_end_04:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 01":
+            $ stop_game_audio(0.25)
             scene bg lorong_gedung_baru with dissolve
             $ safe_music("bgm_hectic_corridor.mp3")
-            show andi panic at kiri
-            show laras cry at kanan
+            show andi panic at kiri_demo
+            show laras cry at kanan_demo
             jump pilihan_01_demo
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label neutral_end_04:
 
-    scene bg overlay_kuning with dissolve
-    hide andi
-    hide laras
-    $ safe_sound("sfx_neutralend.mp3")
-    $ safe_music("bgm_melancholy.mp3")
+    call ending_frame_dual("neutral", "bg lorong_gedung_baru", "andi exhausted", "kiri_demo", "laras sad_s4", "kanan_demo")
+    $ play_neutral_end_audio()
 
     "Neutral Ending 04 - Andi dan Laras masuk lab dalam kondisi kacau."
     "Mereka tidak bisa menjelaskan kompleksitas waktu dari struktur data mereka dengan lancar ke asdos. Nilai proyek mereka jatuh."
@@ -1322,22 +1317,20 @@ label neutral_end_04:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 02":
+            $ stop_game_audio(0.25)
             scene bg lorong_gedung_baru with dissolve
             $ safe_music("bgm_focus.mp3")
-            show andi exhausted at kiri
-            show laras sad at kanan
+            show andi exhausted at kiri_demo
+            show laras sad_s4 at kanan_demo
             jump pilihan_02_demo
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label good_end_04:
 
-    scene bg selasar_gedung_baru with dissolve
-    $ safe_music("bgm_warm.mp3")
-
-    hide andi
-    hide laras
+    call ending_frame_dual("good", "bg selasar_gedung_baru", "andi exhausted", "kiri_demo", "laras cry", "kanan_demo")
+    $ play_good_end_audio("bgm_warm.mp3")
 
     "Good Ending 04 - Kamu tidak hanya berhasil menyelamatkan nilai proyekmu sendiri."
     "Sore harinya, kalian bertiga berdiri di selasar Gedung Baru Fasilkom dengan perasaan lega."
@@ -1349,10 +1342,10 @@ label good_end_04:
         "Apa yang ingin kamu lakukan?"
 
         "Mainkan skenario lain":
-            jump start
+            jump goto_start
 
         "Selesai":
-            return
+            jump end_game_quit
 
 # --- SKENARIO 5: LELAH ---
 
@@ -1360,6 +1353,8 @@ label scene_05_intro:
 
     scene bg balkon_lt5_malam with dissolve
     $ safe_music("bgm_crisis_night.mp3")
+    $ safe_sound("sfx_wind_ambient.mp3")
+    show budi blank_stare at kiri_s5
 
     "Kamu baru saja selesai mengerjakan revisi tugas di kelas. Tas sudah di pundak, kamu melangkah menuju tangga."
     "Di balkon lantai 5, kamu melihat siluet seseorang berdiri di dekat pagar — tidak bergerak, menatap kosong ke bawah."
@@ -1367,8 +1362,6 @@ label scene_05_intro:
     "Teman yang biasanya paling keras tertawanya di angkatan. Sebulan terakhir dia menghilang dari grup, jarang masuk kelas, selalu menolak diajak ngumpul."
     "Lalu kamu ingat pesan di grup angkatan dari Budi sore tadi: \"Makasih buat semuanya ya, temen-temen. Keyboard mekanik gue ambil aja di loker, gue titip buat yang butuh.\""
     "Sesuatu di dadamu langsung mencelos."
-
-    show budi blank_stare at kiri with dissolve
 
     jump pilihan_01_budi
 
@@ -1392,7 +1385,7 @@ label cabang_01a_budi:
 
     $ safe_sound("sfx_wrong.mp3")
 
-    show budi cornered at kiri with dissolve
+    show budi cornered at kiri_s5 with dissolve
     "Budi tersentak kaget. Tubuhnya refleks bergerak mundur satu langkah ke arah pagar."
     b "Jangan deket-deket! Gue cuma pengen tenang!"
     "Suaranya pecah. Kamu bisa melihat jelas sekarang, matanya merah, tangannya gemetar memegang pagar."
@@ -1403,7 +1396,7 @@ label cabang_01c_budi:
 
     $ safe_sound("sfx_wrong.mp3")
 
-    show budi cornered at kiri with dissolve
+    show budi cornered at kiri_s5 with dissolve
     "Budi tersentak kaget. Tubuhnya refleks bergerak mundur satu langkah ke arah pagar."
     b "Jangan deket-deket! Gue cuma pengen tenang!"
     "Suaranya pecah. Kamu bisa melihat jelas sekarang, matanya merah, tangannya gemetar memegang pagar."
@@ -1434,7 +1427,7 @@ label cabang_01b_budi:
     "Kamu memperlambat langkah. Satu langkah. Berhenti sejenak. Satu langkah lagi."
     "Nafasmu sendiri kamu atur agar terdengar tenang."
 
-    show budi blank_stare at kiri with dissolve
+    show budi blank_stare at kiri_s5 with dissolve
     k "Bud..."
     "Hanya itu yang kamu ucapkan. Satu kata, suara rendah."
     "Budi perlahan menoleh. Matanya merah. Pipinya basah."
@@ -1443,7 +1436,7 @@ label cabang_01b_budi:
 
 label pilihan_02_budi:
 
-    show budi breakdown at kiri with dissolve
+    show budi breakdown at kiri_s5 with dissolve
 
     "Kamu berhasil ada di dekat Budi tanpa membuatnya semakin panik. Budi mulai menangis hebat, tubuhnya bergetar. Dia mulai bicara."
     b "Gue nggak punya masa depan lagi, Ran. Semuanya udah berakhir. IPK gue hancur, gue udah jadi beban orang tua. Gue capek pura-pura ceria terus."
@@ -1464,7 +1457,7 @@ label cabang_02a_budi:
 
     $ safe_sound("sfx_wrong.mp3")
 
-    show budi bitter at kiri with dissolve
+    show budi bitter at kiri_s5 with dissolve
     k "Bud, inget Tuhan. Banyak orang yang lebih susah dari lu tapi tetap bertahan. Masa gara-gara IPK doang lu mau nyerah kayak gini?"
     "Budi berhenti menangis. Tapi bukan karena lebih baik."
     b "Lu pikir ini cuma soal IPK? Lu beneran nggak paham..."
@@ -1476,7 +1469,7 @@ label cabang_02c_budi:
 
     $ safe_sound("sfx_wrong.mp3")
 
-    show budi bitter at kiri with dissolve
+    show budi bitter at kiri_s5 with dissolve
     k "Eh, daripada sedih di sini, ada resto baru deket Kutek yang enak. Yuk kita ke sana sekarang, gue yang traktir!"
     "Budi berhenti menangis. Tapi bukan karena lebih baik."
     b "Lu pikir seblak atau makanan bisa nyelesaiin masalah gue? Lu beneran nggak paham..."
@@ -1504,7 +1497,7 @@ label cabang_02b_budi:
     $ safe_sound("sfx_correct.mp3")
     $ safe_music("bgm_gentle.mp3")
 
-    show budi breakdown at kiri with dissolve
+    show budi breakdown at kiri_s5 with dissolve
     k "Gue dengerin, Bud. Gue di sini. Ceritain aja semuanya, lu nggak sendirian malam ini."
     "Kamu tidak mencoba mengisi keheningan. Kamu hanya ada di sana."
     "Budi menangis sejadi-jadinya. Semuanya keluar — tekanan semester, rasa takut mengecewakan orang tua, kelelahan yang menumpuk bertahun-tahun."
@@ -1514,7 +1507,7 @@ label cabang_02b_budi:
 
 label pilihan_03_budi_from_breakdown:
 
-    show budi exhausted at kiri with dissolve
+    show budi exhausted at kiri_s5 with dissolve
     b "Gue takut pulang ke kosan, Ran. Gue takut sendirian malam ini."
 
     jump pilihan_03_budi
@@ -1553,13 +1546,14 @@ label cabang_03b_budi:
     $ safe_music("bgm_gentle.mp3")
 
     "Kamu tidak beranjak dari sisi Budi."
+    $ safe_sound("sfx_phone_vibrate.mp3")
     "Dengan satu tangan yang terus memegang bahunya, kamu perlahan mengeluarkan ponsel dan mengirim pesan ke teman di bawah: \"Lt 5 balkon. Sekarang. Tolong hubungi keamanan kampus.\""
     "Kamu tidak memberi tahu Budi dulu, karena kamu tahu dia butuh merasa aman dulu sebelum menerima bahwa bantuan sedang dalam perjalanan."
     k "Gue di sini, Bud. Gue nggak kemana-mana."
 
     "Dua puluh menit kemudian, tim dari Klinik Makara dan pihak keamanan kampus tiba."
 
-    show budi held at kiri with dissolve
+    show budi held at kiri_s5 with dissolve
     "Budi sempat menolak. Tapi kamu tetap ada di sisinya, menjelaskan pelan-pelan bahwa ini bukan pengkhianatan — ini adalah cara kamu menjaganya."
     b "Lu nggak pergi?"
     k "Nggak. Gue nemenin sampai lu aman."
@@ -1581,8 +1575,7 @@ label cabang_03c_budi:
 
 label bad_end_05a:
 
-    scene bg overlay_hitam with dissolve
-    hide budi
+    call ending_frame("bad", "bg balkon_lt5_malam", "budi bitter", "kiri_s5")
     $ safe_sound("sfx_badend.mp3")
     $ renpy.music.stop(channel="music", fadeout=0.5)
 
@@ -1595,18 +1588,18 @@ label bad_end_05a:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari recovery path":
+            $ stop_game_audio(0.25)
             scene bg balkon_lt5_malam with dissolve
             $ safe_music("bgm_crisis_night.mp3")
-            show budi cornered at kiri
+            show budi cornered at kiri_s5
             jump recovery_01_budi
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label bad_end_05b:
 
-    scene bg overlay_hitam with dissolve
-    hide budi
+    call ending_frame("bad", "bg balkon_lt5_malam", "budi bitter", "kiri_s5")
     $ safe_sound("sfx_badend.mp3")
     $ renpy.music.stop(channel="music", fadeout=0.5)
 
@@ -1619,20 +1612,19 @@ label bad_end_05b:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari recovery path":
+            $ stop_game_audio(0.25)
             scene bg balkon_lt5_malam with dissolve
             $ safe_music("bgm_crisis_night.mp3")
-            show budi bitter at kiri
+            show budi bitter at kiri_s5
             jump recovery_02_budi
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label bad_end_05c:
 
-    scene bg overlay_hitam with dissolve
-    hide budi
-    $ safe_sound("sfx_badend.mp3")
-    $ safe_music("bgm_badend.mp3")
+    call ending_frame("bad", "bg balkon_lt5_malam", "budi bitter", "kiri_s5")
+    $ play_bad_end_audio()
 
     "Bad Ending 05C - Kamu pikir itu sudah cukup."
     "Keesokan paginya, Fasilkom gempar."
@@ -1643,15 +1635,19 @@ label bad_end_05c:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 03":
+            $ stop_game_audio(0.25)
             scene bg balkon_lt5_malam with dissolve
             $ safe_music("bgm_gentle.mp3")
-            show budi exhausted at kiri
+            show budi exhausted at kiri_s5
             jump pilihan_03_budi
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label neutral_end_05:
+
+    call ending_frame("neutral", "bg balkon_lt5_malam", "budi exhausted", "kiri_s5")
+    $ play_neutral_end_audio()
 
     "Neutral Ending 05 - Janjimu menunda bantuan yang dia butuhkan."
     "Dua hari kemudian, Budi tidak sengaja menenggak obat dosis tinggi dan harus dilarikan ke ICU."
@@ -1662,19 +1658,19 @@ label neutral_end_05:
         "Apa yang ingin kamu lakukan?"
 
         "Coba lagi dari pilihan 03":
+            $ stop_game_audio(0.25)
             scene bg balkon_lt5_malam with dissolve
             $ safe_music("bgm_gentle.mp3")
-            show budi exhausted at kiri
+            show budi exhausted at kiri_s5
             jump pilihan_03_budi
 
-        "Kembali ke pilihan skenario":
-            jump start
+        "Kembali ke menu utama":
+            jump goto_start
 
 label good_end_05:
 
-    $ safe_music("bgm_open.mp3")
-
-    hide budi
+    call ending_frame("good", "bg balkon_lt5_malam", "budi breakdown", "kiri_s5")
+    $ play_good_end_audio("bgm_open.mp3")
 
     "Good Ending 05 - Kamu tidak pergi."
     "Budi tidak langsung sembuh. Pemulihan butuh waktu yang panjang."
@@ -1685,7 +1681,7 @@ label good_end_05:
         "Apa yang ingin kamu lakukan?"
 
         "Mainkan skenario lain":
-            jump start
+            jump goto_start
 
         "Selesai":
-            return
+            jump end_game_quit

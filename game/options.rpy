@@ -12,13 +12,12 @@
 ##
 ## Tanda _() yang mengelilingi string menandai itu dapat di terjemahkan.
 
-define config.name = _("MPKT_GAME")
+define config.name = _("HADIR : Penolong pertama Atasi Luka Psikologis")
 
 
-## Meng determinasikan apakah judul yang di berikan di atas di tampilkan di menu
-## utama. Set ini ke False untuk menyembunyikan judul.
+## Judul teks di menu utama diganti gambar TITLE-TRANS (lihat screen main_menu).
 
-define gui.show_name = True
+define gui.show_name = False
 
 
 ## Versi Permainan.
@@ -30,6 +29,9 @@ define config.version = "1.0"
 ## kutip tiga, dan biarkan baris kosong di antara paragraf.
 
 define gui.about = _p("""
+Dibuat oleh FG 2 MPKT F
+
+dibuat dengan bantuan artificial intelligence
 """)
 
 
@@ -63,7 +65,7 @@ define config.has_voice = True
 ## dimainkan sampai permainan di mulai, sampai di hentikan atau file lain di
 ## mainkan.
 
-# define config.main_menu_music = "main-menu-theme.ogg"
+define config.main_menu_music = "audio/main_theme.wav"
 
 
 ## Transisi ####################################################################
